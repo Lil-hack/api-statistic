@@ -85,15 +85,15 @@ public class StatisticServiceImpl
 
 
         Statistic stat = new Statistic();
-        stat.setSubscribers(Integer.parseInt(getInfo("Подписчики <em class=\"pm_counter\">", result)));
+  //      stat.setSubscribers(Integer.parseInt(getInfo("Подписчики <em class=\"pm_counter\">", result)));
         stat.setAudio(11);
         stat.setDate(Calendar.getInstance().getTime());
-        stat.setGroups(Integer.parseInt(getInfo("Интересные страницы <em class=\"pm_counter\">", result)));
-        stat.setInfo(getTextInfo("<div class=\"pp_info\">", result));
-        stat.setLastactive(getTextInfo("activity_offline_text\">", result));
-        stat.setPhoto(Integer.parseInt(getInfo("Фотографии <em class=\"pm_counter\">", result)));
-        stat.setVideo(Integer.parseInt(getInfo("Видео <em class=\"pm_counter\">", result)));
-        stat.setWall(30);
+//        stat.setGroups(Integer.parseInt(getInfo("Интересные страницы <em class=\"pm_counter\">", result)));
+//        stat.setInfo(getTextInfo("<div class=\"pp_info\">", result));
+//        stat.setLastactive(getTextInfo("activity_offline_text\">", result));
+//        stat.setPhoto(Integer.parseInt(getInfo("Фотографии <em class=\"pm_counter\">", result)));
+//        stat.setVideo(Integer.parseInt(getInfo("Видео <em class=\"pm_counter\">", result)));
+//        stat.setWall(30);
         stat.setUid(uuid);
         return stat;
     }
