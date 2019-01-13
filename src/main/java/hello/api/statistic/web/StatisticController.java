@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api-statistic")
 public class StatisticController {
 
