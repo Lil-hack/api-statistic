@@ -1,18 +1,23 @@
 package hello.api.statistic.service;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+
 import hello.api.statistic.model.StatisticInfo;
 import hello.api.statistic.repository.StatisticRepos;
 import hello.api.statistic.entity.Statistic;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Calendar;
-import java.util.List;
-import java.util.UUID;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +26,9 @@ public class StatisticServiceImpl
 
     @Autowired
     private StatisticRepos statisticRepos;
+    static final String URL_API_VK = "https://api.vk.com/method/users.get";
+    static final String VK_TOKEN = "5c5e70cfcf443268b00e8914" +
+            " fc9b752980d7c428691f9458d510eaa8f9ec1b7d16695aa764b516fc27a4f";
 
 
     @Nullable
@@ -28,18 +36,21 @@ public class StatisticServiceImpl
     public void createStatistic(@Nonnull UUID uuid, @Nonnull String vk) {
         statisticRepos.saveAndFlush(createStat(uuid, vk));
     }
+
     @Nullable
     @Override
-    public void updateUuidStat(@Nonnull UUID uuid, @Nonnull UUID newUuid)
-    {statisticRepos.updateUuidUser(uuid,newUuid);
+    public void updateUuidStat(@Nonnull UUID uuid, @Nonnull UUID newUuid) {
+        statisticRepos.updateUuidUser(uuid, newUuid);
 
     }
+
     @Nullable
     @Override
-    public void updateVKStat(@Nonnull StatisticInfo statisticInfo)
-    {statisticRepos.updateVkUser(statisticInfo.getSubscribers(),statisticInfo.getPhoto(),statisticInfo.getVideo(),statisticInfo.getUid());
+    public void updateVKStat(@Nonnull StatisticInfo statisticInfo) {
+        statisticRepos.updateVkUser(statisticInfo.getSubscribers(), statisticInfo.getPhoto(), statisticInfo.getVideo(), statisticInfo.getUid());
 
     }
+
     @Override
     public List<StatisticInfo> findAllStatsByUUID(@Nonnull UUID uuid) {
         return statisticRepos.findAllByUid(uuid)
@@ -77,52 +88,42 @@ public class StatisticServiceImpl
 
     @Nonnull
     private Statistic createStat(@Nonnull UUID uuid, @Nonnull String vk) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://vk.com/" + vk);
-        RestTemplate restTemplate = new RestTemplate();
-
-        // Send request with GET method and default Headers.
-        String result = restTemplate.getForObject(builder.toUriString(), String.class);
-
-
-        Statistic stat = new Statistic();
-  //      stat.setSubscribers(Integer.parseInt(getInfo("Подписчики <em class=\"pm_counter\">", result)));
-        stat.setAudio(11);
-        stat.setDate(Calendar.getInstance().getTime());
-//        stat.setGroups(Integer.parseInt(getInfo("Интересные страницы <em class=\"pm_counter\">", result)));
-//        stat.setInfo(getTextInfo("<div class=\"pp_info\">", result));
-//        stat.setLastactive(getTextInfo("activity_offline_text\">", result));
-       stat.setPhoto(Integer.parseInt(getInfo("Фотографии <em class=\"pm_counter\">", result)));
-        stat.setVideo(Integer.parseInt(getInfo("Видео <em class=\"pm_counter\">", result)));
-//        stat.setWall(30);
-        stat.setUid(uuid);
-        return stat;
-    }
+        try {
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL_API_VK)
+                    .queryParam("user_ids", vk).queryParam("fields", "counters")
+                    .queryParam("access_token", VK_TOKEN);
+            RestTemplate restTemplate = new RestTemplate();
 
 
-    String getInfo(String info, String result) {
-        int startPos = result.indexOf(info) + info.length();
-        int lastPos = result.substring(startPos, startPos + 20).indexOf("<");
+            String jsonString = restTemplate.getForObject(builder.toUriString(), String.class);
+            JsonFactory jfactory = new JsonFactory();
 
-        String sotni = "<span class=\"num_delim\"> </span>";
-        int findpos = result.substring(lastPos, lastPos + 30).indexOf(sotni);
-        if (findpos != -1) {
-            int startPos2 = startPos + findpos + sotni.length();
-            int lastPos2 = result.substring(startPos2, startPos2 + 10).indexOf("<");
-            System.out.println(startPos + " " + lastPos + " " + findpos + " " + startPos2 + " " + lastPos2);
-            return result.substring(startPos, startPos + lastPos).replaceAll("\\D+", "")
-                    + result.substring(startPos2, startPos2 + lastPos2).replaceAll("\\D+", "");
-        } else {
-            return result.substring(startPos, startPos + lastPos).replaceAll("\\D+", "");
+            /*** read from file ***/
+            Statistic stat = new Statistic();
+            stat.setSubscribers(null);
+            stat.setAudio(null);
+            stat.setDate(null);
+            stat.setGroups(null);
+            stat.setInfo(null);
+            stat.setLastactive(null);
+            stat.setPhoto(null);
+            stat.setVideo(stat.getVideo());
+            stat.setWall(stat.getWall());
+            stat.setUid(stat.getUid());
+            return stat;
+        }catch (Exception e) {
+
+            return null;
         }
 
-
     }
 
-    String getTextInfo(String info, String result) {
-        int startPos = result.indexOf(info) + info.length();
-        int lastPos = result.substring(startPos, startPos + 100).indexOf("<");
-        return result.substring(startPos, startPos + lastPos);
-    }
+
+
+
+
+
+
 
     @Nonnull
     private StatisticInfo createStatInfo(@Nonnull Statistic stat) {
