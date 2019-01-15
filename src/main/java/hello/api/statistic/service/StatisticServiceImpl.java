@@ -108,7 +108,7 @@ public class StatisticServiceImpl
             stat.setSubscriptions(jsonObject2.getInt("subscriptions"));
             stat.setPages(jsonObject2.getInt("pages"));
 
-            stat.setUid(stat.getUid());
+            stat.setUid(uuid);
             return stat;
         }catch (Exception e) {
 
