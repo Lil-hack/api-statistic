@@ -31,8 +31,7 @@ public class StatisticServiceImpl
     @Autowired
     private StatisticRepos statisticRepos;
     static final String URL_API_VK = "https://api.vk.com/method/users.get";
-    static final String VK_TOKEN = "5c5e70cfcf443268b00e8914" +
-            " fc9b752980d7c428691f9458d510eaa8f9ec1b7d16695aa764b516fc27a4f";
+    static final String VK_TOKEN = "5c5e70cfcf443268b00e8914fc9b752980d7c428691f9458d510eaa8f9ec1b7d16695aa764b516fc27a4f";
 
 
     @Nullable
