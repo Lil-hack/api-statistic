@@ -85,8 +85,8 @@ public class StatisticServiceImpl
             RestTemplate restTemplate2 = new RestTemplate();
             String jsonString2 = restTemplate2.getForObject(builder2.toUriString(), String.class);
 
-
-
+            logger.debug("jsonString2"+jsonString2);
+            logger.debug("jsonString"+jsonString);
             JSONObject jsonObjectPhoto = new JSONObject(jsonString2);
             JSONObject jsonObjectPhoto2 = new JSONObject(jsonObjectPhoto.getJSONArray("response").get(0).toString());
 
