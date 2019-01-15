@@ -7,7 +7,10 @@ import com.fasterxml.jackson.core.JsonToken;
 import hello.api.statistic.model.StatisticInfo;
 import hello.api.statistic.repository.StatisticRepos;
 import hello.api.statistic.entity.Statistic;
+import hello.api.statistic.web.StatisticController;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +27,7 @@ import java.util.stream.Collectors;
 @Service
 public class StatisticServiceImpl
         implements StatisticService {
-
+    private static final Logger logger = LoggerFactory.getLogger(StatisticServiceImpl.class);
     @Autowired
     private StatisticRepos statisticRepos;
     static final String URL_API_VK = "https://api.vk.com/method/users.get";
@@ -111,7 +114,7 @@ public class StatisticServiceImpl
             stat.setUid(uuid);
             return stat;
         }catch (Exception e) {
-
+            logger.error("statistivkget", e);
             return null;
         }
 
