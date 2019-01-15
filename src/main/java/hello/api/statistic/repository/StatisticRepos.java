@@ -14,10 +14,6 @@ public interface StatisticRepos
         extends JpaRepository<Statistic, Integer> {
 
 
-    List<Statistic> findFirst7ByUid(UUID uuid);
-
-    List<Statistic> findFirst30ByUid(UUID uuid);
-
     List<Statistic> findAllByUid(UUID uuid);
 
     @Transactional
@@ -28,9 +24,9 @@ public interface StatisticRepos
             "     where t.uid = :uid")
     void updateUuidUser(@Param("uid") UUID uuid, @Param("newUid") UUID newUuid);
 
-    @Transactional
-    @Modifying
-    @Query("update Statistic t set t.subscribers=:subscribers, t.photo=:photo, t.video=:video where t.uid = :uid")
-    void updateVkUser(@Param("subscribers") Integer subscribers, @Param("photo") Integer photo ,@Param("video") Integer video,@Param("uid") UUID uid);
+//    @Transactional
+//    @Modifying
+//    @Query("update Statistic t set t.subscribers=:subscribers, t.photo=:photo, t.video=:video where t.uid = :uid")
+//    void updateVkUser(@Param("subscribers") Integer subscribers, @Param("photo") Integer photo ,@Param("video") Integer video,@Param("uid") UUID uid);
 
 }

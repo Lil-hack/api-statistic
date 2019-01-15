@@ -15,12 +15,10 @@ public interface StatisticService {
 
     @Nullable
     void updateUuidStat(@Nonnull UUID uuid, @Nonnull UUID newUuid);
-    @Nullable
-    void updateVKStat(@Nonnull StatisticInfo statisticInfo);
+//    @Nullable
+//    void updateVKStat(@Nonnull StatisticInfo statisticInfo);
 
-    List<StatisticInfo> findWeekStatsByUUID(@Nonnull UUID uuid);
 
-    List<StatisticInfo> findMonthStatsByUUID(@Nonnull UUID uuid);
 
     List<StatisticInfo> findAllStatsByUUID(@Nonnull UUID uuid);
 

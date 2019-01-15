@@ -8,44 +8,52 @@ import java.util.UUID;
 
 
 @Entity
-@Table(name = "statistic")
+@Table(name = "stat")
 public class Statistic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
-    @Column(name = "subscribers")
-    private Integer subscribers;
-
-
-    @Column(name = "photo")
-    private Integer photo;
-
-    @Column(name = "wall")
-    private Integer wall;
-
-    @Column(name = "infoage")
-    private String info;
-
-    @Column(name = "video")
-    private Integer video;
-
-    @Column(name = "audio")
-    private Integer audio;
-
+    @Column(name = "photoUrl")
+    private String photoUrl;
+    @Column(name = "first_name")
+    private String first_name;
+    @Column(name = "last_name")
+    private String last_name;
+    @Column(name = "albums")
+    private Integer albums;
+    @Column(name = "videos")
+    private Integer videos;
+    @Column(name = "audios")
+    private Integer audios;
+    @Column(name = "notes")
+    private Integer notes;
+    @Column(name = "photos")
+    private Integer photos;
     @Column(name = "groups")
     private Integer groups;
-
-    @Column(name = "lastactive")
-    private String lastactive;
+    @Column(name = "gifts")
+    private Integer gifts;
+    @Column(name = "friends")
+    private Integer friends;
+    @Column(name = "online_friends")
+    private Integer online_friends;
+    @Column(name = "user_photos")
+    private Integer user_photos;
+    @Column(name = "followers")
+    private Integer followers;
+    @Column(name = "subscriptions")
+    private Integer subscriptions;
+    @Column(name = "pages")
+    private Integer pages;
 
     @Column(name = "date")
     private Date date;
 
     @Column(name = "uid")
     private UUID uid;
+
 
     public Integer getId() {
         return id;
@@ -55,52 +63,68 @@ public class Statistic {
         this.id = id;
     }
 
-    public Integer getSubscribers() {
-        return subscribers;
+    public String getPhotoUrl() {
+        return photoUrl;
     }
 
-    public void setSubscribers(Integer subscribers) {
-        this.subscribers = subscribers;
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
-    public Integer getPhoto() {
-        return photo;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public void setPhoto(Integer photo) {
-        this.photo = photo;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
-    public Integer getWall() {
-        return wall;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public void setWall(Integer wall) {
-        this.wall = wall;
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
-    public String getInfo() {
-        return info;
+    public Integer getAlbums() {
+        return albums;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setAlbums(Integer albums) {
+        this.albums = albums;
     }
 
-    public Integer getVideo() {
-        return video;
+    public Integer getVideos() {
+        return videos;
     }
 
-    public void setVideo(Integer video) {
-        this.video = video;
+    public void setVideos(Integer videos) {
+        this.videos = videos;
     }
 
-    public Integer getAudio() {
-        return audio;
+    public Integer getAudios() {
+        return audios;
     }
 
-    public void setAudio(Integer audio) {
-        this.audio = audio;
+    public void setAudios(Integer audios) {
+        this.audios = audios;
+    }
+
+    public Integer getNotes() {
+        return notes;
+    }
+
+    public void setNotes(Integer notes) {
+        this.notes = notes;
+    }
+
+    public Integer getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(Integer photos) {
+        this.photos = photos;
     }
 
     public Integer getGroups() {
@@ -111,21 +135,60 @@ public class Statistic {
         this.groups = groups;
     }
 
-    public String getLastactive() {
-        return lastactive;
+    public Integer getGifts() {
+        return gifts;
     }
 
-    public void setLastactive(String lastactive) {
-        this.lastactive = lastactive;
+    public void setGifts(Integer gifts) {
+        this.gifts = gifts;
     }
 
-
-    public UUID getUid() {
-        return uid;
+    public Integer getFriends() {
+        return friends;
     }
 
-    public void setUid(UUID uid) {
-        this.uid = uid;
+    public void setFriends(Integer friends) {
+        this.friends = friends;
+    }
+
+    public Integer getOnline_friends() {
+        return online_friends;
+    }
+
+    public void setOnline_friends(Integer online_friends) {
+        this.online_friends = online_friends;
+    }
+
+    public Integer getUser_photos() {
+        return user_photos;
+    }
+
+    public void setUser_photos(Integer user_photos) {
+        this.user_photos = user_photos;
+    }
+
+    public Integer getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Integer followers) {
+        this.followers = followers;
+    }
+
+    public Integer getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(Integer subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+
+    public Integer getPages() {
+        return pages;
+    }
+
+    public void setPages(Integer pages) {
+        this.pages = pages;
     }
 
     public Date getDate() {
@@ -136,41 +199,65 @@ public class Statistic {
         this.date = date;
     }
 
+    public UUID getUid() {
+        return uid;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Statistic statistic = (Statistic) o;
         return Objects.equals(id, statistic.id) &&
-                Objects.equals(subscribers, statistic.subscribers) &&
-                Objects.equals(photo, statistic.photo) &&
-                Objects.equals(wall, statistic.wall) &&
-                Objects.equals(info, statistic.info) &&
-                Objects.equals(video, statistic.video) &&
-                Objects.equals(audio, statistic.audio) &&
+                Objects.equals(photoUrl, statistic.photoUrl) &&
+                Objects.equals(first_name, statistic.first_name) &&
+                Objects.equals(last_name, statistic.last_name) &&
+                Objects.equals(albums, statistic.albums) &&
+                Objects.equals(videos, statistic.videos) &&
+                Objects.equals(audios, statistic.audios) &&
+                Objects.equals(notes, statistic.notes) &&
+                Objects.equals(photos, statistic.photos) &&
                 Objects.equals(groups, statistic.groups) &&
-                Objects.equals(lastactive, statistic.lastactive) &&
+                Objects.equals(gifts, statistic.gifts) &&
+                Objects.equals(friends, statistic.friends) &&
+                Objects.equals(online_friends, statistic.online_friends) &&
+                Objects.equals(user_photos, statistic.user_photos) &&
+                Objects.equals(followers, statistic.followers) &&
+                Objects.equals(subscriptions, statistic.subscriptions) &&
+                Objects.equals(pages, statistic.pages) &&
                 Objects.equals(date, statistic.date) &&
                 Objects.equals(uid, statistic.uid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, subscribers, photo, wall, info, video, audio, groups, lastactive, date, uid);
+        return Objects.hash(id, photoUrl, first_name, last_name, albums, videos, audios, notes, photos, groups, gifts, friends, online_friends, user_photos, followers, subscriptions, pages, date, uid);
     }
 
     @Override
     public String toString() {
         return "Statistic{" +
                 "id=" + id +
-                ", subscribers=" + subscribers +
-                ", photo=" + photo +
-                ", wall=" + wall +
-                ", info='" + info + '\'' +
-                ", video=" + video +
-                ", audio=" + audio +
+                ", photoUrl='" + photoUrl + '\'' +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", albums=" + albums +
+                ", videos=" + videos +
+                ", audios=" + audios +
+                ", notes=" + notes +
+                ", photos=" + photos +
                 ", groups=" + groups +
-                ", lastactive='" + lastactive + '\'' +
+                ", gifts=" + gifts +
+                ", friends=" + friends +
+                ", online_friends=" + online_friends +
+                ", user_photos=" + user_photos +
+                ", followers=" + followers +
+                ", subscriptions=" + subscriptions +
+                ", pages=" + pages +
                 ", date=" + date +
                 ", uid=" + uid +
                 '}';

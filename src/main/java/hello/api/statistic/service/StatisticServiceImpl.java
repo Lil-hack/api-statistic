@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import hello.api.statistic.model.StatisticInfo;
 import hello.api.statistic.repository.StatisticRepos;
 import hello.api.statistic.entity.Statistic;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,12 +45,7 @@ public class StatisticServiceImpl
 
     }
 
-    @Nullable
-    @Override
-    public void updateVKStat(@Nonnull StatisticInfo statisticInfo) {
-        statisticRepos.updateVkUser(statisticInfo.getSubscribers(), statisticInfo.getPhoto(), statisticInfo.getVideo(), statisticInfo.getUid());
 
-    }
 
     @Override
     public List<StatisticInfo> findAllStatsByUUID(@Nonnull UUID uuid) {
@@ -59,21 +55,6 @@ public class StatisticServiceImpl
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<StatisticInfo> findWeekStatsByUUID(@Nonnull UUID uuid) {
-        return statisticRepos.findFirst7ByUid(uuid)
-                .stream()
-                .map(this::createStatInfo)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<StatisticInfo> findMonthStatsByUUID(@Nonnull UUID uuid) {
-        return statisticRepos.findFirst30ByUid(uuid)
-                .stream()
-                .map(this::createStatInfo)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public StatisticInfo refreshStatistic(@Nonnull UUID uuid, @Nonnull String vk) {
@@ -93,22 +74,40 @@ public class StatisticServiceImpl
                     .queryParam("user_ids", vk).queryParam("fields", "counters")
                     .queryParam("access_token", VK_TOKEN);
             RestTemplate restTemplate = new RestTemplate();
-
-
             String jsonString = restTemplate.getForObject(builder.toUriString(), String.class);
-            JsonFactory jfactory = new JsonFactory();
 
-            /*** read from file ***/
-            Statistic stat = new Statistic();
-            stat.setSubscribers(null);
-            stat.setAudio(null);
-            stat.setDate(null);
-            stat.setGroups(null);
-            stat.setInfo(null);
-            stat.setLastactive(null);
-            stat.setPhoto(null);
-            stat.setVideo(stat.getVideo());
-            stat.setWall(stat.getWall());
+            UriComponentsBuilder builder2 = UriComponentsBuilder.fromHttpUrl(URL_API_VK)
+                    .queryParam("user_ids", vk).queryParam("fields", "photo_max")
+                    .queryParam("access_token", VK_TOKEN);
+            RestTemplate restTemplate2 = new RestTemplate();
+            String jsonString2 = restTemplate2.getForObject(builder2.toUriString(), String.class);
+
+
+
+            JSONObject jsonObjectPhoto = new JSONObject(jsonString2);
+            JSONObject jsonObjectPhoto2 = new JSONObject(jsonObjectPhoto.getJSONArray("response").get(0).toString());
+
+
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONObject jsonObject2 = new JSONObject(jsonObject.getJSONArray("response").get(0).toString()).getJSONObject("counters");
+
+            Statistic stat=new Statistic();
+            stat.setFirst_name(jsonObjectPhoto2.getString("first_name"));
+            stat.setLast_name(jsonObjectPhoto2.getString("last_name"));
+            stat.setPhotoUrl(jsonObjectPhoto2.getString("photo_max"));
+            stat.setAlbums(jsonObject2.getInt("albums"));
+            stat.setAudios(jsonObject2.getInt("audios"));
+            stat.setVideos(jsonObject2.getInt("videos"));
+            stat.setNotes(jsonObject2.getInt("notes"));
+            stat.setPhotos(jsonObject2.getInt("photos"));
+            stat.setGroups(jsonObject2.getInt("groups"));
+            stat.setGifts(jsonObject2.getInt("gifts"));
+            stat.setFriends(jsonObject2.getInt("friends"));
+            stat.setOnline_friends(jsonObject2.getInt("online_friends"));
+            stat.setFollowers(jsonObject2.getInt("followers"));
+            stat.setSubscriptions(jsonObject2.getInt("subscriptions"));
+            stat.setPages(jsonObject2.getInt("pages"));
+
             stat.setUid(stat.getUid());
             return stat;
         }catch (Exception e) {
@@ -126,20 +125,29 @@ public class StatisticServiceImpl
 
 
     @Nonnull
-    private StatisticInfo createStatInfo(@Nonnull Statistic stat) {
+    private StatisticInfo createStatInfo(@Nonnull Statistic statfirst) {
 
-        StatisticInfo statInfo = new StatisticInfo();
-        statInfo.setSubscribers(stat.getSubscribers());
-        statInfo.setAudio(stat.getAudio());
-        statInfo.setDate(stat.getDate());
-        statInfo.setGroups(stat.getGroups());
-        statInfo.setInfo(stat.getInfo());
-        statInfo.setLastactive(stat.getLastactive());
-        statInfo.setPhoto(stat.getPhoto());
-        statInfo.setVideo(stat.getVideo());
-        statInfo.setWall(stat.getWall());
-        statInfo.setUid(stat.getUid());
-        return statInfo;
+        StatisticInfo stat = new StatisticInfo();
+        stat.setFirst_name(statfirst.getFirst_name());
+        stat.setLast_name(statfirst.getLast_name());
+        stat.setPhotoUrl(statfirst.getPhotoUrl());
+        stat.setAlbums(statfirst.getAlbums());
+        stat.setAudios(statfirst.getAudios());
+        stat.setVideos(statfirst.getVideos());
+        stat.setNotes(statfirst.getNotes());
+        stat.setPhotos(statfirst.getPhotos());
+        stat.setGroups(statfirst.getGroups());
+        stat.setGifts(statfirst.getGifts());
+        stat.setFriends(statfirst.getFriends());
+        stat.setOnline_friends(statfirst.getOnline_friends());
+        stat.setFollowers(statfirst.getFollowers());
+        stat.setSubscriptions(statfirst.getSubscriptions());
+        stat.setPages(statfirst.getPages());
+        stat.setUid(statfirst.getUid());
+        stat.setDate(statfirst.getDate());
+
+
+        return stat;
 
 
     }

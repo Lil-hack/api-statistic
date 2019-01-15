@@ -42,42 +42,7 @@ public class StatisticController {
 
     }
 
-    @GetMapping("/getWeek{uuid}")
-    public ResponseEntity<List<StatisticInfo>> findWeek(@RequestParam UUID uuid) {
-        try {
-            List<StatisticInfo> stats = statRepos.findWeekStatsByUUID(uuid);
 
-            if (stats.isEmpty()) {
-                return new ResponseEntity(HttpStatus.NO_CONTENT);
-                // You many decide to return HttpStatus.NOT_FOUND
-            } else {
-                return new ResponseEntity<List<StatisticInfo>>(stats, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            logger.error("getWeekError", e);
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
-
-    @GetMapping("/getMonth{uuid}")
-    public ResponseEntity<List<StatisticInfo>> findMonth(@RequestParam UUID uuid) {
-        try {
-            List<StatisticInfo> stats = statRepos.findMonthStatsByUUID(uuid);
-
-            if (stats.isEmpty()) {
-                return new ResponseEntity(HttpStatus.NO_CONTENT);
-                // You many decide to return HttpStatus.NOT_FOUND
-            } else {
-                return new ResponseEntity<List<StatisticInfo>>(stats, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            logger.error("getMonthError", e);
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-
-    }
 
     @PostMapping("/create")
     public ResponseEntity createStat(@RequestBody Map<String, String> info) {
@@ -103,20 +68,7 @@ public class StatisticController {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PutMapping("/updateVK")
-    public ResponseEntity updateVKUser(@RequestBody Map<String, String> requestUserDetails) {
-        try {
 
-          StatisticInfo stat=  statRepos.refreshStatistic(UUID.fromString(requestUserDetails.get("uid")), requestUserDetails.get("vk"));
-            statRepos.updateVKStat(stat);
-
-
-            return new ResponseEntity(HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("updateUuidUserError", e);
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
     @GetMapping("/get{vk}{uuid}")
     public ResponseEntity<StatisticInfo> getStat(@RequestParam String vk, @RequestParam UUID uuid) {
         try {
