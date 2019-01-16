@@ -110,7 +110,7 @@ public class StatisticServiceImpl
             stat.setFollowers(jsonObject2.getInt("followers"));
             stat.setSubscriptions(jsonObject2.getInt("subscriptions"));
             stat.setPages(jsonObject2.getInt("pages"));
-
+            stat.setDate(Calendar.getInstance().getTime());
             stat.setUid(uuid);
             return stat;
         }catch (Exception e) {
