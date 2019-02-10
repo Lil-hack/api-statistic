@@ -76,8 +76,10 @@ public class StatisticController {
 
     @GetMapping("/getAll{uuid}")
     public ResponseEntity<List<StatisticInfo>> findAll(@RequestHeader(value="Authorization",required = false) String token,@RequestParam UUID uuid) {
+        System.out.println(token);
         if(!OauthCheckToken(token))
             return   new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        System.out.println("vcr norm");
         try {
             List<StatisticInfo> stats = statRepos.findAllStatsByUUID(uuid);
 
