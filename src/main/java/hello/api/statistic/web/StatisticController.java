@@ -40,15 +40,12 @@ public class StatisticController {
         else {
             try {
                 String token2 = token.replace("Bearer ", "");
-                System.out.println(token2);
-                logger.info("oauth"+ token2);
-                logger.debug("oauth"+ token2);
+
                 UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(ACCESS_TOKEN_VALIDATE_URI)
                         .queryParam("token", token2);
                 RestTemplate restTemplate = new RestTemplate();
                 String result = restTemplate.getForObject(builder.toUriString(), String.class);
-                logger.info("result"+ result);
-                logger.debug("result"+ result);
+
                 JsonFactory factory = new JsonFactory();
 
                 ObjectMapper mapper = new ObjectMapper(factory);
@@ -77,8 +74,9 @@ public class StatisticController {
     @GetMapping("/getAll{uuid}")
     public ResponseEntity<List<StatisticInfo>> findAll(@RequestHeader(value="Authorization",required = false) String token,@RequestParam UUID uuid) {
         System.out.println(token);
-        if(!OauthCheckToken(token))
-            return   new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        if(OauthCheckToken(token)==false) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
         System.out.println("vcr norm");
         try {
             List<StatisticInfo> stats = statRepos.findAllStatsByUUID(uuid);
@@ -102,8 +100,9 @@ public class StatisticController {
     @PostMapping("/create")
     public ResponseEntity createStat(@RequestHeader(value="Authorization",required = false) String token,@RequestBody Map<String, String> info) {
 
-        if(!OauthCheckToken(token))
-            return   new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        if(OauthCheckToken(token)==false) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
         try {
             statRepos.createStatistic(UUID.fromString(info.get("uid")), info.get("vk"));
             return new ResponseEntity(HttpStatus.CREATED);
@@ -114,8 +113,9 @@ public class StatisticController {
     }
     @PutMapping("/updateUUID")
     public ResponseEntity updateUuidUser(@RequestHeader(value="Authorization",required = false) String token,@RequestBody Map<String, String> requestUserDetails) {
-        if(!OauthCheckToken(token))
-            return   new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        if(OauthCheckToken(token)==false) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
         try {
 
 
@@ -131,8 +131,9 @@ public class StatisticController {
 
     @GetMapping("/get{vk}{uuid}")
     public ResponseEntity<StatisticInfo> getStat(@RequestHeader(value="Authorization",required = false) String token,@RequestParam String vk, @RequestParam UUID uuid) {
-        if(!OauthCheckToken(token))
-            return   new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        if(OauthCheckToken(token)==false) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
         try {
 
             return new ResponseEntity(statRepos.refreshStatistic(uuid, vk), HttpStatus.OK);
@@ -144,8 +145,9 @@ public class StatisticController {
 
     @DeleteMapping("/delete{uuid}")
     public ResponseEntity deleteStats(@RequestHeader(value="Authorization",required = false) String token,@RequestParam UUID uuid) {
-        if(!OauthCheckToken(token))
-            return   new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        if(OauthCheckToken(token)==false) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
         try {
             statRepos.deleteStats(uuid);
 
